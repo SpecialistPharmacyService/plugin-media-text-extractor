@@ -1,6 +1,6 @@
 {
-  "name": "makeandship/acf-elasticsearch",
-  "description": "Integrate wordpress and advanced custom fields with elasticsearch.",
+  "name": "makeandship/plugin-media-text-extractor",
+  "description": "Extract text from media library attachments and store them for further processing",
   "require": {},
   "require-dev": {},
   "authors": [
