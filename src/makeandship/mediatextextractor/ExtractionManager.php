@@ -43,13 +43,28 @@ class ExtractionManager
         // extract files (capture time)
         $before = microtime(true);
 
-        $count = $this->extract_text_from_files($files);
+        $response = $this->extract_text_from_files($files);
+        $count    = Util::safely_get_attribute($response, 'count');
 
         $after       = microtime(true);
         $search_time = ($after - $before) . " sec";
         Util::debug('ExtractionManager#extract', 'Extracted text: ' . $search_time);
 
+        // update count
+        $status['count'] = $status['count'] + intval($count);
+
+        if ($status['count'] >= $status['total']) {
+            $status['completed'] = true;
+        } else {
+            // only update page if we're not complete
+            $status['page'] = $page + 1;
+        }
+
+        SettingsManager::get_instance()->set(Constants::OPTION_STATUS, $status);
+
         Util::debug('ExtractionManager#extract', 'exit');
+
+        return $status;
     }
 
     public function extract_text_from_files($files)
@@ -69,13 +84,16 @@ class ExtractionManager
                         try {
                             $text   = $extractor->extract($filepath);
                             $result = $this->save_extracted_text($file, $text);
-                            if ($result) {
-                                $count++;
+                            if (!$result) {
+                                Util::debug('ExtractionManager#extract_text_from_files', 'Unable to save ' . Util::safely_get_attribute($file, 'ID'));
                             }
                         } catch (Exception $error) {
                             $errors[] = $error;
                         }
                     }
+
+                    // increement count either way - log failed saves
+                    $count++;
                 }
             }
         }

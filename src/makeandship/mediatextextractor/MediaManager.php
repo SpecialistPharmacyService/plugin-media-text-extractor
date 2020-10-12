@@ -44,6 +44,7 @@ class MediaManager
         } else {
             $args  = $this->get_count_file_args();
             $count = intval((new \WP_Query($args))->found_posts);
+            Util::debug('MediaManager#get_files_count count: ', $count);
         }
 
         Util::debug('MediaManager#get_files_count', 'exit');
@@ -92,8 +93,9 @@ class MediaManager
         Util::debug('MediaManager#get_count_file_args', 'enter');
 
         $args = array(
-            'post_type' => 'attachment',
-            'fields'    => 'count',
+            'post_type'   => 'attachment',
+            'post_status' => 'inherit',
+            'fields'      => 'count',
         );
 
         Util::debug('MediaManager#get_count_file_args', 'exit');
@@ -110,8 +112,7 @@ class MediaManager
             'posts_per_page' => $per,
             'paged'          => $page,
             'orderby'        => array(
-                'post_type'  => 'ASC',
-                'post_title' => 'ASC',
+                'post_date' => 'DESC',
             ),
         );
 
