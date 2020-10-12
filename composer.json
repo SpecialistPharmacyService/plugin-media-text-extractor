@@ -1,0 +1,14 @@
+{
+  "name": "makeandship/acf-elasticsearch",
+  "description": "Integrate wordpress and advanced custom fields with elasticsearch.",
+  "require": {},
+  "require-dev": {},
+  "authors": [
+    {
+      "name": "mthomsit",
+      "email": "mark@makeandship.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
