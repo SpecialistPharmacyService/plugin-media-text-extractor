@@ -82,11 +82,9 @@ class ExtractionManager
                     $filepath = $this->get_filepath($file);
                     if ($filepath) {
                         try {
-                            $text   = $extractor->extract($filepath);
+                            $text = $extractor->extract($filepath);
+                            // false is a failure or matches existing value hence can't infer error from false
                             $result = $this->save_extracted_text($file, $text);
-                            if (!$result) {
-                                Util::debug('ExtractionManager#extract_text_from_files', 'Unable to save ' . Util::safely_get_attribute($file, 'ID'));
-                            }
                         } catch (Exception $error) {
                             $errors[] = $error;
                         }

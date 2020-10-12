@@ -13,7 +13,7 @@ class Constants
 
     const EXTRACTOR_TIKA = "tika";
 
-    const DEFAULT_FILES_PER_PAGE = 2;
+    const DEFAULT_FILES_PER_PAGE = 50;
 
     // no instantiation
     public function __construct()
