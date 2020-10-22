@@ -28,6 +28,9 @@ class MediaTextExtractorManager
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
         add_action('admin_menu', array($this, 'initialise_menu'));
 
+        // posts
+        add_action('add_attachment', array(&$this, 'add_attachment'), 10, 1); // after acf fields save - 15
+
         // plugin
         add_action('wp_ajax_analyse_media', array(&$this, 'analyse_media'));
         add_action('wp_ajax_resume_analysing_media', array(&$this, 'resume_analysing_media'));
@@ -137,5 +140,45 @@ class MediaTextExtractorManager
     {
         Util::debug('MediaTextExtractorManager#deactivate', 'enter');
         Util::debug('MediaTextExtractorManager#deactivate', 'exit');
+    }
+
+    /**
+     * -------------------
+     * Extraction Lifecycle
+     * -------------------
+     */
+
+    /**
+     *
+     */
+    public function add_attachment($post_id)
+    {
+        // get the post to index
+        if (is_object($post_id)) {
+            $post = $post_id;
+        } else {
+            $post = get_post($post_id, ARRAY_A);
+
+            $id = Util::safely_get_attribute($post, 'ID');
+            if ($id) {
+                $filepath         = get_attached_file($id);
+                $post['filepath'] = $filepath;
+            }
+        }
+
+        // can't index empty posts
+        if ($post == null) {
+            return;
+        }
+
+        $post_type = Util::safely_get_attribute($post, 'post_type');
+        if (!$post_type === 'attachment') {
+            return;
+        }
+
+        // extract
+        $manager = new ExtractionManager();
+        $manager->extract_text_from_file($post);
+
     }
 }

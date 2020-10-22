@@ -67,6 +67,22 @@ class ExtractionManager
         return $status;
     }
 
+    public function extract_text_from_file($file)
+    {
+        if ($file) {
+            if (is_array($file) && Util::is_array_sequential($file)) {
+                return $this->extract_text_from_files($file);
+            } else {
+                return $this->extract_text_from_files([$file]);
+            }
+        }
+
+        return array(
+            'errors' => array(),
+            'count'  => 0,
+        );
+    }
+
     public function extract_text_from_files($files)
     {
         $count  = 0;
