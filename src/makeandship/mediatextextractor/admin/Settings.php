@@ -8,9 +8,11 @@ if (!empty($_POST)) {
 
     // get incoming options
     $acf_field = trim($_POST[Constants::OPTION_ACF_FIELD_NAME]);
+    $acf_date_field = trim($_POST[Constants::OPTION_ACF_DATE_FIELD_NAME]);
 
     // save incoming options
     SettingsManager::get_instance()->set(Constants::OPTION_ACF_FIELD_NAME, $acf_field);
+    SettingsManager::get_instance()->set(Constants::OPTION_ACF_DATE_FIELD_NAME, $acf_date_field);
 }
 ?>
     <h1>Media Text Extractor</h1>
@@ -44,6 +46,16 @@ echo HtmlUtils::render_field(
         'class'       => '',
         'placeholder' => '',
         'value'       => 'extracted_text',
+    )
+);
+
+echo HtmlUtils::render_field(
+    'ACF field for extracted date',
+    Constants::OPTION_ACF_DATE_FIELD_NAME,
+    array(
+        'class'       => '',
+        'placeholder' => '',
+        'value'       => 'extracted_date',
     )
 );
 

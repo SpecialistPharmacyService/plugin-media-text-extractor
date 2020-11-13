@@ -12,6 +12,7 @@ class ExtractionManager
     {
         $this->media_manager            = new MediaManager();
         $this->extracted_text_acf_field = SettingsManager::get_instance()->get(Constants::OPTION_ACF_FIELD_NAME);
+        $this->extracted_date_acf_field = SettingsManager::get_instance()->get(Constants::OPTION_ACF_DATE_FIELD_NAME);
     }
 
     public function extract($fresh)
@@ -98,9 +99,12 @@ class ExtractionManager
                     $filepath = $this->get_filepath($file);
                     if ($filepath) {
                         try {
-                            $text = $extractor->extract($filepath);
-                            // false is a failure or matches existing value hence can't infer error from false
-                            $result = $this->save_extracted_text($file, $text);
+                            $has_run_extraction = $this->has_extracted_text($file);
+                            if (!$has_run_extraction) {
+                                $text = $extractor->extract($filepath);
+                                // false is a failure or matches existing value hence can't infer error from false
+                                $result = $this->save_extracted_text($file, $text);
+                            }
                         } catch (Exception $error) {
                             $errors[] = $error;
                         }
@@ -128,13 +132,34 @@ class ExtractionManager
         return null;
     }
 
+    public function has_extracted_text($file)
+    {
+        if ($file) {
+            $id = Util::safely_get_attribute($file, 'ID');
+
+            $date_name = $this->extracted_date_acf_field;
+            if ($id && $date_name) {
+                $date = get_field($date_name, $id);
+                if ($date) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function save_extracted_text($file, $text)
     {
         if ($file && $text) {
-            $id   = Util::safely_get_attribute($file, 'ID');
-            $name = $this->extracted_text_acf_field;
-            if ($id && $name) {
-                $result = update_field($name, $text, $id);
+            $id        = Util::safely_get_attribute($file, 'ID');
+            $name      = $this->extracted_text_acf_field;
+            $date_name = $this->extracted_date_acf_field;
+
+            if ($id && $name && $date_name) {
+                $date_result = update_field($date_name, date('Y-m-d H:i:s'), $id);
+                $result      = update_field($name, $text, $id);
+
                 return $result;
             }
         }

@@ -44,8 +44,9 @@ class SettingsManager
         if (!isset($this->settings) || $fresh) {
             $this->settings = array();
 
-            $this->settings[Constants::OPTION_ACF_FIELD_NAME] = $this->get_option(Constants::OPTION_ACF_FIELD_NAME);
-            $this->settings[Constants::OPTION_STATUS]         = $this->get_option(Constants::OPTION_STATUS);
+            $this->settings[Constants::OPTION_ACF_FIELD_NAME]      = $this->get_option(Constants::OPTION_ACF_FIELD_NAME);
+            $this->settings[Constants::OPTION_ACF_DATE_FIELD_NAME] = $this->get_option(Constants::OPTION_ACF_DATE_FIELD_NAME);
+            $this->settings[Constants::OPTION_STATUS]              = $this->get_option(Constants::OPTION_STATUS);
         }
 
         return $this->settings;
@@ -74,6 +75,7 @@ class SettingsManager
         if ($name) {
             if (in_array($name, [
                 Constants::OPTION_ACF_FIELD_NAME,
+                Constants::OPTION_ACF_DATE_FIELD_NAME,
                 Constants::OPTION_STATUS,
             ])) {
                 return true;
@@ -187,7 +189,7 @@ class SettingsManager
         if ($rows) {
             foreach ($rows as $row) {
                 $matches = array();
-                preg_match('/Apache Tika (\d+\.\d+\.\d+)/', $row, $matches, PREG_OFFSET_CAPTURE);
+                preg_match('/Apache Tika (\d+\.\d+\.*\d*)/', $row, $matches, PREG_OFFSET_CAPTURE);
 
                 $version = is_array($matches) && count($matches) > 0 ? $matches[1][0] : null;
                 if ($version) {

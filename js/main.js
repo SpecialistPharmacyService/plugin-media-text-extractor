@@ -40,7 +40,9 @@ jQuery(document).ready(function ($) {
             );
             analyseMedia();
           } else {
-            $('#extract-messages').html(`All ${status.total} posts indexed`);
+            $('#extract-messages').html(
+              `All ${status.total} attachments analysed`
+            );
             $('#extract-spinner').removeClass('is-active');
             $("#extract-container input[type='submit']").attr(
               'disabled',
