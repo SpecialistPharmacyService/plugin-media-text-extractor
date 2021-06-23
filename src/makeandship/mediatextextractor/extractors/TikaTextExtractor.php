@@ -2,6 +2,7 @@
 
 namespace makeandship\mediatextextractor\extractors;
 
+use makeandship\mediatextextractor\Constants;
 use makeandship\mediatextextractor\Util;
 
 class TikaTextExtractor extends TextExtractor
@@ -9,8 +10,12 @@ class TikaTextExtractor extends TextExtractor
     public function extract($filepath)
     {
         if ($filepath) {
-            $rows    = array();
-            $command = "/usr/local/bin/tika --text " . $filepath . " | awk NF 2>&1";
+            $rows = array();
+
+            $env_command  = getenv(Constants::ENV_TIKA_COMMAND);
+            $tika_command = $env_command ? $env_command : "/usr/local/bin/tika";
+            $command      = $tika_command . " --text " . $filepath . " | awk NF 2>&1";
+
             Util::debug("TikaTextExtractor#extract", $command);
             exec($command, $rows);
             if ($rows) {

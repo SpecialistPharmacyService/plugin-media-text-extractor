@@ -34,6 +34,7 @@ class MediaTextExtractorManager
         // plugin
         add_action('wp_ajax_analyse_media', array(&$this, 'analyse_media'));
         add_action('wp_ajax_resume_analysing_media', array(&$this, 'resume_analysing_media'));
+        add_action('wp_ajax_analyse_individual_media', array(&$this, 'analyse_individual_media'));
 
         Util::debug('MediaTextExtractorManager#initialise_plugin_hooks', 'exit');
     }
@@ -134,6 +135,27 @@ class MediaTextExtractorManager
         die($json);
 
         Util::debug('MediaTextExtractorManager#resume_analysing_media', 'exit');
+    }
+
+    public function analyse_individual_media()
+    {
+        Util::debug('MediaTextExtractorManager#analyse_individual_media', 'enter');
+
+        $id = Util::safely_get_attribute($_POST, 'id');
+        if ($id) {
+            $manager = new ExtractionManager();
+            $status  = $manager->extract_individual($id);
+
+            $response = array(
+                'message' => 'Individual analysis complete',
+                'status'  => $status,
+            );
+
+            $json = json_encode($response);
+            die($json);
+        }
+
+        Util::debug('MediaTextExtractorManager#analyse_individual_media', 'exit');
     }
 
     public function deactivate()

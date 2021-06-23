@@ -7,7 +7,7 @@ use makeandship\mediatextextractor\settings\SettingsManager;
 if (!empty($_POST)) {
 
     // get incoming options
-    $acf_field = trim($_POST[Constants::OPTION_ACF_FIELD_NAME]);
+    $acf_field      = trim($_POST[Constants::OPTION_ACF_FIELD_NAME]);
     $acf_date_field = trim($_POST[Constants::OPTION_ACF_DATE_FIELD_NAME]);
 
     // save incoming options
@@ -95,6 +95,36 @@ echo HtmlUtils::render_buttons([
 ?>
                         <span id="extract-spinner" class="acf-spinner"></span>
                         <span id="extract-messages"></span>
+                    </div>
+                </div>
+            </div>
+            <div id="indexing-individual-container" class="postbox">
+                <h2 class="handle"><span>3. Analyse individual media</span></h2>
+                <div class="inside acf-fields -left">
+                    <div class="media-text-extractor-container">
+                        <?php
+echo HtmlUtils::render_field(
+    'Post or Attachment ID',
+    Constants::OPTION_ACF_POST_OR_ATTACHMENT_ID,
+    array(
+        'class'       => '',
+        'placeholder' => '54372',
+        'value'       => '',
+    )
+);
+?>
+                        <?php
+echo HtmlUtils::render_buttons([
+    array(
+        'value' => 'Analyse media',
+        'name'  => 'media_text_extractor_analyse_individual_media_button',
+        'class' => 'button',
+        'id'    => 'analyse-individual-media',
+    ),
+]);
+?>
+                        <span id="extract-individual-spinner" class="acf-spinner"></span>
+                        <span id="extract-individual-messages"></span>
                     </div>
                 </div>
             </div>

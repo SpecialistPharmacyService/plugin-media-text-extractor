@@ -68,6 +68,40 @@ class ExtractionManager
         return $status;
     }
 
+    public function extract_individual($id)
+    {
+        Util::debug('ExtractionManager#extract_individual', 'exit');
+
+        Util::debug('ExtractionManager#extract_individual: id', $id);
+
+        // gather files (capture time)
+        $before = microtime(true);
+
+        $files = $this->media_manager->get_files_by_id($id);
+
+        $after       = microtime(true);
+        $search_time = ($after - $before) . " sec";
+        Util::debug('ExtractionManager#extract_individual', 'Gathered posts: ' . $search_time);
+
+        // extract files (capture time)
+        $before = microtime(true);
+
+        $response = $this->extract_text_from_files($files);
+        $count    = Util::safely_get_attribute($response, 'count');
+
+        $after       = microtime(true);
+        $search_time = ($after - $before) . " sec";
+        Util::debug('ExtractionManager#extract_individual', 'Extracted text: ' . $search_time);
+
+        // update count
+        $status['count']     = $status['count'] + intval($count);
+        $status['completed'] = true;
+
+        Util::debug('ExtractionManager#extract_individual', 'exit');
+
+        return $status;
+    }
+
     public function extract_text_from_file($file)
     {
         if ($file) {

@@ -185,7 +185,10 @@ class SettingsManager
 
     public function is_tika_supported()
     {
-        exec("/usr/local/bin/tika --version 2>&1", $rows);
+        $env_command = getenv(Constants::ENV_TIKA_COMMAND);
+        $command     = $env_command ? $env_command : "/usr/local/bin/tika";
+
+        exec($command . " --version 2>&1", $rows);
         if ($rows) {
             foreach ($rows as $row) {
                 $matches = array();

@@ -120,4 +120,51 @@ class MediaManager
 
         return $args;
     }
+
+    public function get_files_by_id($id)
+    {
+        if ($id) {
+            $post_type = get_post_type($id);
+            if ($post_type === 'revision') {
+                return null;
+            } else if ($post_type === 'attachment') {
+                $post = get_post($id);
+
+                $file = $post->to_array();
+
+                $filepath         = get_attached_file($id);
+                $file['filepath'] = $filepath;
+
+                $files = array($file);
+            } else {
+                $args = array(
+                    'post_parent'    => $id,
+                    'post_type'      => 'attachment',
+                    'posts_per_page' => -1,
+                    'orderby'        => 'menu_order',
+                    'order'          => 'ASC',
+                );
+                $posts = get_posts($args);
+
+                $files = array();
+                foreach ($posts as $post) {
+                    if (!is_array($post)) {
+                        $file = $post->to_array();
+                    } else {
+                        $file = $post;
+                    }
+                    $post_id = Util::safely_get_attribute($file, 'ID');
+                    if ($post_id) {
+                        $filepath         = get_attached_file($post_id);
+                        $file['filepath'] = $filepath;
+                    }
+                    $files[] = $file;
+                }
+            }
+
+            return $files;
+        }
+
+        return null;
+    }
 }
