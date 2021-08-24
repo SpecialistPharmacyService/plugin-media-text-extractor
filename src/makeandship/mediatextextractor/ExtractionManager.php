@@ -2,6 +2,7 @@
 
 namespace makeandship\mediatextextractor;
 
+use makeandship\logging\Log;
 use makeandship\mediatextextractor\Constants;
 use makeandship\mediatextextractor\extractors\TextExtractorFactory;
 use makeandship\mediatextextractor\settings\SettingsManager;
@@ -12,12 +13,12 @@ class ExtractionManager
     {
         $this->media_manager            = new MediaManager();
         $this->extracted_text_acf_field = SettingsManager::get_instance()->get(Constants::OPTION_ACF_FIELD_NAME);
-        $this->extracted_date_acf_field = SettingsManager::get_instance()->get(Constants::OPTION_ACF_DATE_FIELD_NAME);
+        $this->extracted_hash_acf_field = SettingsManager::get_instance()->get(Constants::OPTION_ACF_HASH_FIELD_NAME);
     }
 
     public function extract($fresh)
     {
-        Util::debug('ExtractionManager#extract', 'exit');
+        Log::debug('ExtractionManager#extract', 'exit');
 
         $status = SettingsManager::get_instance()->get(Constants::OPTION_STATUS);
 
@@ -39,7 +40,7 @@ class ExtractionManager
 
         $after       = microtime(true);
         $search_time = ($after - $before) . " sec";
-        Util::debug('ExtractionManager#extract', 'Gathered posts: ' . $search_time);
+        Log::debug('ExtractionManager#extract', 'Gathered posts: ' . $search_time);
 
         // extract files (capture time)
         $before = microtime(true);
@@ -49,7 +50,7 @@ class ExtractionManager
 
         $after       = microtime(true);
         $search_time = ($after - $before) . " sec";
-        Util::debug('ExtractionManager#extract', 'Extracted text: ' . $search_time);
+        Log::debug('ExtractionManager#extract', 'Extracted text: ' . $search_time);
 
         // update count
         $status['count'] = $status['count'] + intval($count);
@@ -63,16 +64,19 @@ class ExtractionManager
 
         SettingsManager::get_instance()->set(Constants::OPTION_STATUS, $status);
 
-        Util::debug('ExtractionManager#extract', 'exit');
+        Log::debug('ExtractionManager#extract', 'exit');
 
         return $status;
     }
 
     public function extract_individual($id)
     {
-        Util::debug('ExtractionManager#extract_individual', 'exit');
+        Log::debug('ExtractionManager#extract_individual', 'exit');
+        Log::debug('ExtractionManager#extract_individual: id', $id);
 
-        Util::debug('ExtractionManager#extract_individual: id', $id);
+        $status = array(
+            'count' => 0,
+        );
 
         // gather files (capture time)
         $before = microtime(true);
@@ -81,7 +85,7 @@ class ExtractionManager
 
         $after       = microtime(true);
         $search_time = ($after - $before) . " sec";
-        Util::debug('ExtractionManager#extract_individual', 'Gathered posts: ' . $search_time);
+        Log::debug('ExtractionManager#extract_individual', 'Gathered posts: ' . $search_time);
 
         // extract files (capture time)
         $before = microtime(true);
@@ -91,13 +95,13 @@ class ExtractionManager
 
         $after       = microtime(true);
         $search_time = ($after - $before) . " sec";
-        Util::debug('ExtractionManager#extract_individual', 'Extracted text: ' . $search_time);
+        Log::debug('ExtractionManager#extract_individual', 'Extracted text: ' . $search_time);
 
         // update count
         $status['count']     = $status['count'] + intval($count);
         $status['completed'] = true;
 
-        Util::debug('ExtractionManager#extract_individual', 'exit');
+        Log::debug('ExtractionManager#extract_individual', 'exit');
 
         return $status;
     }
@@ -171,10 +175,12 @@ class ExtractionManager
         if ($file) {
             $id = Util::safely_get_attribute($file, 'ID');
 
-            $date_name = $this->extracted_date_acf_field;
-            if ($id && $date_name) {
-                $date = get_field($date_name, $id);
-                if ($date) {
+            $hash_name = $this->extracted_hash_acf_field;
+            if ($id && $hash_name) {
+                $update_hash  = $this->get_hash($file);
+                $current_hash = get_field($hash_name, $id);
+
+                if ($update_hash && $current_hash && $update_hash === $current_hash) {
                     return true;
                 }
             }
@@ -183,15 +189,33 @@ class ExtractionManager
         return false;
     }
 
+    public function get_hash($file)
+    {
+        if ($file) {
+            $published_date = Util::safely_get_attribute($file, 'post_date_gmt');
+            $title          = Util::safely_get_attribute($file, 'post_title');
+            $id             = Util::safely_get_attribute($file, 'ID');
+            $filesize       = filesize(get_attached_file($id));
+
+            $hash = hash('md5', $published_date . $filesize . $title);
+            return $hash;
+        }
+
+        return false;
+    }
+
     public function save_extracted_text($file, $text)
     {
         if ($file && $text) {
-            $id        = Util::safely_get_attribute($file, 'ID');
-            $name      = $this->extracted_text_acf_field;
-            $date_name = $this->extracted_date_acf_field;
+            $id = Util::safely_get_attribute($file, 'ID');
 
-            if ($id && $name && $date_name) {
-                $date_result = update_field($date_name, date('Y-m-d H:i:s'), $id);
+            $name      = $this->extracted_text_acf_field;
+            $hash_name = $this->extracted_hash_acf_field;
+
+            if ($id && $name && $hash_name) {
+                $hash = $this->get_hash($file);
+
+                $hash_result = update_field($hash_name, $hash, $id);
                 $result      = update_field($name, $text, $id);
 
                 return $result;

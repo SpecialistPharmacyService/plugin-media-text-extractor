@@ -2,6 +2,8 @@
 
 namespace makeandship\mediatextextractor;
 
+use makeandship\logging\Log;
+
 class MediaManager
 {
 
@@ -11,7 +13,7 @@ class MediaManager
 
     public function initialise_status()
     {
-        Util::debug('MediaManager#initialise_status', 'enter');
+        Log::debug('MediaManager#initialise_status', 'enter');
 
         $total  = $this->get_files_count(null);
         $status = array(
@@ -21,14 +23,14 @@ class MediaManager
             'completed' => false,
         );
 
-        Util::debug('MediaManager#initialise_status', 'exit');
+        Log::debug('MediaManager#initialise_status', 'exit');
 
         return $status;
     }
 
     public function get_files_count($blog_id = null)
     {
-        Util::debug('MediaManager#get_files_count', 'enter');
+        Log::debug('MediaManager#get_files_count', 'enter');
 
         $count = 0;
 
@@ -44,17 +46,17 @@ class MediaManager
         } else {
             $args  = $this->get_count_file_args();
             $count = intval((new \WP_Query($args))->found_posts);
-            Util::debug('MediaManager#get_files_count count: ', $count);
+            Log::debug('MediaManager#get_files_count count: ', $count);
         }
 
-        Util::debug('MediaManager#get_files_count', 'exit');
+        Log::debug('MediaManager#get_files_count', 'exit');
 
         return $count;
     }
 
     public function get_files($blog_id, $page, $per)
     {
-        Util::debug('MediaManager#get_files', 'enter');
+        Log::debug('MediaManager#get_files', 'enter');
 
         if (isset($blog_id)) {
             switch_to_blog($blog_id);
@@ -83,14 +85,14 @@ class MediaManager
             restore_current_blog();
         }
 
-        Util::debug('MediaManager#get_files', 'enter');
+        Log::debug('MediaManager#get_files', 'enter');
 
         return $files;
     }
 
     private function get_count_file_args()
     {
-        Util::debug('MediaManager#get_count_file_args', 'enter');
+        Log::debug('MediaManager#get_count_file_args', 'enter');
 
         $args = array(
             'post_type'   => 'attachment',
@@ -98,14 +100,14 @@ class MediaManager
             'fields'      => 'count',
         );
 
-        Util::debug('MediaManager#get_count_file_args', 'exit');
+        Log::debug('MediaManager#get_count_file_args', 'exit');
 
         return $args;
     }
 
     private function get_paginated_file_args($page, $per)
     {
-        Util::debug('MediaManager#get_paginated_file_args', 'enter');
+        Log::debug('MediaManager#get_paginated_file_args', 'enter');
 
         $args = array(
             'post_type'      => 'attachment',
@@ -116,7 +118,7 @@ class MediaManager
             ),
         );
 
-        Util::debug('MediaManager#get_paginated_file_args', 'exit');
+        Log::debug('MediaManager#get_paginated_file_args', 'exit');
 
         return $args;
     }

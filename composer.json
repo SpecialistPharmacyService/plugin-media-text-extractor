@@ -1,8 +1,16 @@
 {
   "name": "makeandship/plugin-media-text-extractor",
   "description": "Extract text from media library attachments and store them for further processing",
-  "require": {},
+  "require": {
+    "makeandship/logging-php": "v1.0.0"
+  },
   "require-dev": {},
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://bitbucket.org/makeandship/logging-php.git"
+    }
+  ],
   "authors": [
     {
       "name": "mthomsit",

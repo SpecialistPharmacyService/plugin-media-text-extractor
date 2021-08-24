@@ -45,7 +45,7 @@ class SettingsManager
             $this->settings = array();
 
             $this->settings[Constants::OPTION_ACF_FIELD_NAME]      = $this->get_option(Constants::OPTION_ACF_FIELD_NAME);
-            $this->settings[Constants::OPTION_ACF_DATE_FIELD_NAME] = $this->get_option(Constants::OPTION_ACF_DATE_FIELD_NAME);
+            $this->settings[Constants::OPTION_ACF_HASH_FIELD_NAME] = $this->get_option(Constants::OPTION_ACF_HASH_FIELD_NAME);
             $this->settings[Constants::OPTION_STATUS]              = $this->get_option(Constants::OPTION_STATUS);
         }
 
@@ -75,7 +75,7 @@ class SettingsManager
         if ($name) {
             if (in_array($name, [
                 Constants::OPTION_ACF_FIELD_NAME,
-                Constants::OPTION_ACF_DATE_FIELD_NAME,
+                Constants::OPTION_ACF_HASH_FIELD_NAME,
                 Constants::OPTION_STATUS,
             ])) {
                 return true;
