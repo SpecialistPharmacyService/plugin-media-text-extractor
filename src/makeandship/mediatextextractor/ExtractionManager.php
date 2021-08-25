@@ -18,7 +18,7 @@ class ExtractionManager
 
     public function extract($fresh)
     {
-        Log::debug('ExtractionManager#extract', 'exit');
+        Log::debug('ExtractionManager#extract: exit');
 
         $status = SettingsManager::get_instance()->get(Constants::OPTION_STATUS);
 
@@ -33,26 +33,19 @@ class ExtractionManager
         $page = $status['page'];
         $per  = Constants::DEFAULT_FILES_PER_PAGE;
 
-        // gather files (capture time)
-        $before = microtime(true);
-
+        // gather files
+        Log::start('Extractor get files');
         $files = $this->media_manager->get_files(null, $page, $per);
+        Log::finish('Extractor get files');
 
-        $after       = microtime(true);
-        $search_time = ($after - $before) . " sec";
-        Log::debug('ExtractionManager#extract', 'Gathered posts: ' . $search_time);
-
-        // extract files (capture time)
-        $before = microtime(true);
-
+        // extract text
+        Log::start('Extractor text from files');
         $response = $this->extract_text_from_files($files);
-        $count    = Util::safely_get_attribute($response, 'count');
-
-        $after       = microtime(true);
-        $search_time = ($after - $before) . " sec";
-        Log::debug('ExtractionManager#extract', 'Extracted text: ' . $search_time);
+        Log::finish('Extractor text from files');
 
         // update count
+        $count = Util::safely_get_attribute($response, 'count');
+
         $status['count'] = $status['count'] + intval($count);
 
         if ($status['count'] >= $status['total']) {
@@ -64,14 +57,14 @@ class ExtractionManager
 
         SettingsManager::get_instance()->set(Constants::OPTION_STATUS, $status);
 
-        Log::debug('ExtractionManager#extract', 'exit');
+        Log::debug('ExtractionManager#extract: exit');
 
         return $status;
     }
 
     public function extract_individual($id)
     {
-        Log::debug('ExtractionManager#extract_individual', 'exit');
+        Log::debug('ExtractionManager#extract_individual: exit');
         Log::debug('ExtractionManager#extract_individual: id', $id);
 
         $status = array(
@@ -85,7 +78,7 @@ class ExtractionManager
 
         $after       = microtime(true);
         $search_time = ($after - $before) . " sec";
-        Log::debug('ExtractionManager#extract_individual', 'Gathered posts: ' . $search_time);
+        Log::debug('ExtractionManager#extract_individual: Gathered posts: ' . $search_time);
 
         // extract files (capture time)
         $before = microtime(true);
@@ -95,13 +88,13 @@ class ExtractionManager
 
         $after       = microtime(true);
         $search_time = ($after - $before) . " sec";
-        Log::debug('ExtractionManager#extract_individual', 'Extracted text: ' . $search_time);
+        Log::debug('ExtractionManager#extract_individual: Extracted text: ' . $search_time);
 
         // update count
         $status['count']     = $status['count'] + intval($count);
         $status['completed'] = true;
 
-        Log::debug('ExtractionManager#extract_individual', 'exit');
+        Log::debug('ExtractionManager#extract_individual: exit');
 
         return $status;
     }
