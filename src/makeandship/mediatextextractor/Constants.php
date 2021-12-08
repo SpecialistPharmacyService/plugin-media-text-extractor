@@ -5,7 +5,7 @@ namespace makeandship\mediatextextractor;
 class Constants
 {
     // plugin
-    const VERSION    = '1.0.4';
+    const VERSION    = '1.0.5';
     const DB_VERSION = 1;
 
     const OPTION_STATUS                    = 'media_text_extractor_status';

@@ -3,7 +3,7 @@
 Plugin Name: Media Text Extractor
 Plugin URI:  https://www/makeandship.com/blog/plugin-media-text-extractor
 Description: Extract text from media files
-Version:     1.0.2
+Version:     1.0.5
 Author:      Make and Ship Limited
 Author URI:  https://www.makeandship.com/
 License:     MIT

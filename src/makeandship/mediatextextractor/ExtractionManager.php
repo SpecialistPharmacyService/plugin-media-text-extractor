@@ -127,12 +127,12 @@ class ExtractionManager
                 $extractor = $factory->get($extractor_name);
 
                 foreach ($files as $file) {
-                    $filepath = $this->get_filepath($file);
-                    if ($filepath) {
+                    $url = $this->get_file_url($file);
+                    if ($url) {
                         try {
                             $has_run_extraction = $this->has_extracted_text($file);
                             if (!$has_run_extraction) {
-                                $text = $extractor->extract($filepath);
+                                $text = $extractor->extract($url);
                                 // false is a failure or matches existing value hence can't infer error from false
                                 $result = $this->save_extracted_text($file, $text);
                             }
@@ -158,6 +158,17 @@ class ExtractionManager
         if ($file && is_array($file)) {
             $filepath = Util::safely_get_attribute($file, 'filepath');
             return $filepath;
+        }
+
+        return null;
+    }
+
+    public function get_file_url($file)
+    {
+        $id = Util::safely_get_attribute($file, 'ID');
+        if ($id) {
+            $url = wp_get_attachment_url($id);
+            return $url;
         }
 
         return null;
