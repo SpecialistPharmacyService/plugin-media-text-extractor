@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d2f11be624bd5d2854f0c3926ae9223",
+    "content-hash": "2dd9fccc8daffbeb7afb96f425c0294a",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v2.0.0",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "5a546a8cc4607f38cfbd8e20b3de234e45b2110f"
+                "reference": "af93ba6e52236418f07a278033eba6959ee5b983"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/5a546a8cc4607f38cfbd8e20b3de234e45b2110f",
-                "reference": "5a546a8cc4607f38cfbd8e20b3de234e45b2110f",
+                "url": "https://api.github.com/repos/composer/installers/zipball/af93ba6e52236418f07a278033eba6959ee5b983",
+                "reference": "af93ba6e52236418f07a278033eba6959ee5b983",
                 "shasum": ""
             },
             "require": {
@@ -37,7 +37,8 @@
                 "class": "Composer\\Installers\\Plugin",
                 "branch-alias": {
                     "dev-main": "2.x-dev"
-                }
+                },
+                "plugin-modifies-install-path": true
             },
             "autoload": {
                 "psr-4": {
@@ -129,6 +130,10 @@
                 "zend",
                 "zikula"
             ],
+            "support": {
+                "issues": "https://github.com/composer/installers/issues",
+                "source": "https://github.com/composer/installers/tree/v2.1.1"
+            },
             "funding": [
                 {
                     "url": "https://packagist.com",
@@ -143,39 +148,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-04T13:56:36+00:00"
+            "time": "2022-04-13T09:13:00+00:00"
         },
         {
-            "name": "makeandship/logging-php",
-            "version": "v1.0.0",
+            "name": "specialistpharmacyservice/logging-php",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://bitbucket.org/makeandship/logging-php.git",
-                "reference": "bb9e32315badf1ddc91459c05319c334895bd332"
+                "url": "https://github.com/SpecialistPharmacyService/logging-php.git",
+                "reference": "v1.0.1"
             },
             "require": {
-                "composer/installers": "*",
-                "php": ">=7.0"
+                "composer/installers": "^2.0"
             },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "makeandship\\": "src/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Mark Thomsit",
-                    "email": "mark@makeandship.com",
-                    "homepage": "https://www.makeandship.com"
-                }
-            ],
-            "description": "PHP log support",
-            "keywords": [
-                "error_log",
-                "logging"
-            ],
-            "time": "2021-06-30T16:51:03+00:00"
+            "type": "library"
         }
     ],
     "packages-dev": [],
@@ -186,5 +172,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.2.0"
 }
