@@ -2,20 +2,20 @@
   "name": "makeandship/plugin-media-text-extractor",
   "description": "Extract text from media library attachments and store them for further processing",
   "require": {
-    "specialistpharmacyservice/logging-php": "v1.0.1"
+    "makeandship/logging-php": "v1.0.4"
   },
   "require-dev": {},
   "repositories": [
     {
       "type": "package",
       "package": {
-        "name": "specialistpharmacyservice/logging-php",
-        "version": "v1.0.1",
+        "name": "makeandship/logging-php",
+        "version": "v1.0.4",
         "type": "library",
         "source": {
           "url": "https://github.com/SpecialistPharmacyService/logging-php.git",
           "type": "git",
-          "reference": "v1.0.1"
+          "reference": "v1.0.4"
         },
         "require": {
           "composer/installers": "^2.0"
