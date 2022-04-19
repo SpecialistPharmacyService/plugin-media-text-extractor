@@ -27,6 +27,8 @@ require_once dirname(__FILE__) . '/src/makeandship/mediatextextractor/extractors
 require_once dirname(__FILE__) . '/src/makeandship/mediatextextractor/settings/SettingsHelper.php';
 require_once dirname(__FILE__) . '/src/makeandship/mediatextextractor/settings/SettingsManager.php';
 
+require_once __DIR__ . '/vendor/makeandship/logging-php/src/logging/Log.php';
+
 use makeandship\mediatextextractor\Constants;
 use makeandship\mediatextextractor\MediaTextExtractorManager;
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2dd9fccc8daffbeb7afb96f425c0294a",
+    "content-hash": "6be35d4098864a8c1123172c916e2de4",
     "packages": [
         {
             "name": "composer/installers",
@@ -151,12 +151,12 @@
             "time": "2022-04-13T09:13:00+00:00"
         },
         {
-            "name": "specialistpharmacyservice/logging-php",
-            "version": "v1.0.1",
+            "name": "makeandship/logging-php",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SpecialistPharmacyService/logging-php.git",
-                "reference": "v1.0.1"
+                "reference": "v1.0.4"
             },
             "require": {
                 "composer/installers": "^2.0"
